@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <title>CoursesX</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand ml-5 ">CourseX</a>
+        <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-dark mr-5" type="submit">Search</button>
+        </form>
+    </nav>
+    <div class="container mt-5 col-6">
+        <div class="input-group mb-3 my-5">
+            <input id="input_addon" type="text" class="form-control" placeholder="Chapter..." aria-label="Recipient's username" aria-describedby="button-addon2">
+            <button class="btn btn-outline-success" type="button" id="button-addon2">Add</button>
+        </div>
+
+        <ul id="parentList" class="list-group">
+            <li class="list-group-item d-flex justify-content-between">
+                <p class="justify-content-center"></p>
+                <h3 class="flex-grow-1">An item</h3> 
+                <button class="btn btn-outline-warning mx-3" type="button" id="button-addon2" onclick="editChapter(this)">Edit</button>
+                <button class="btn btn-outline-danger" type="button" id="button-addon2" onclick="removeChapter(this)">Remove</button>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        let bTn=document.getElementById('button-addon2');
+        let parentList=document.getElementById('parentList');
+
+        bTn.addEventListener('click', addChapter)
+        function addChapter(e){
+            let emptyMessage = parentList.querySelector('.newEmptyMsg');
+            if (emptyMessage) {
+                emptyMessage.remove();
+            }
+            let currentBtn = e.currentTarget;
+            let currentInput = currentBtn.previousElementSibling;
+            let value = currentInput.value;
+
+            let newLi = document.createElement('li');
+            // newLi.classList.add('list-group-item');
+            newLi.className="list-group-item d-flex justify-content-between";
+            newLi.innerHTML = `<h3 class="flex-grow-1">${value}</h3><button class="btn btn-outline-warning mx-3" type="button" id="button-addon2" "editChapter(this)">Edit</button><button class="btn btn-outline-danger" type="button" id="button-addon2" onclick="removeChapter(this)">Remove</button>`;
+            parentList.appendChild(newLi);
+        }
+
+        function removeChapter(currElement){
+            currElement.parentElement.remove();
+            if(parentList.children.length <=0 ){
+                let emptyMsg = document.createElement("p")
+                // emptyMsg.classList.add("newEmptyMsg")
+                emptyMsg.className = "newEmptyMsg list-group-item d-flex justify-content-center";
+                emptyMsg.textContent = "Nothing is here. Please Add new chapter...";
+                parentList.appendChild(emptyMsg);
+            }
+
+        }
+
+        function editChapter(currElement){
+           if(currElement.textContent == "Done"){
+            currElement.textContent = "Edit";
+            let currChapterName = currElement.previousElementSibling.value;
+            let currHeading = document.createElement('h3');
+            currHeading.className = "flex-grow-1";
+            currHeading.textContent=currChapterName;
+            currElement.parentElement.replaceChild(currHeading, currElement.previousElementSibling)
+
+           }
+           else{
+            currElement.textContent = "Done";
+            let currChapterName = currElement.previousElementSibling.textContent;
+            let currInput = document.createElement('input')
+            currInput.type = 'text';
+            currInput.placeholder = 'Chapter';
+            currInput.className = 'form-control';
+            currInput.value=currChapterName;
+
+            currElement.parentElement.replaceChild(currInput, currElement.previousElementSibling)
+           }
+        }
+    </script>
+</body>
+</html>
